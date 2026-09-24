@@ -16,13 +16,11 @@ jobs:
 
       - name: Check files
         run: |
-          echo "Checking repository files..."
+          echo "Repository files:"
           find . -maxdepth 3 -type f | sort
 
       - name: Make test executable
-        run: chmod +x Assignment_1/test.sh
+        run: chmod +x test.sh
 
       - name: Run Autograding
-        run: ./Assignment_1/test.sh
-
-       
+        run: ./test.sh
