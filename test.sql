@@ -1,90 +1,105 @@
--- Automated tests for the Student Pass/Fail PL/SQL assignment.
+#!/bin/bash
 
--- This test file expects the submitted program to use a variable named
--- v_marks and produce PASS/FAIL using DBMS_OUTPUT.
+echo "=========================================="
+echo " PL/SQL IF-ELSE AUTOGRADING"
+echo "=========================================="
 
-SET SERVEROUTPUT ON;
+FILE="answers.sql"
 
-PROMPT ========================================
-PROMPT Test 1: Marks = 39
-PROMPT Expected: FAIL
-PROMPT ========================================
+# Check answers.sql
+if [ ! -f "$FILE" ]; then
+    echo "FAIL: answers.sql not found."
+    exit 1
+fi
 
-DECLARE
-v_marks NUMBER := 39;
-BEGIN
-IF v_marks >= 40 THEN
-DBMS_OUTPUT.PUT_LINE('PASS');
-ELSE
-DBMS_OUTPUT.PUT_LINE('FAIL');
-END IF;
-END;
-/
+echo "PASS: answers.sql found."
 
-PROMPT ========================================
-PROMPT Test 2: Marks = 40
-PROMPT Expected: PASS
-PROMPT ========================================
+# Read file and convert to lowercase
+CONTENT=$(cat "$FILE" | tr '[:upper:]' '[:lower:]')
 
-DECLARE
-v_marks NUMBER := 40;
-BEGIN
-IF v_marks >= 40 THEN
-DBMS_OUTPUT.PUT_LINE('PASS');
-ELSE
-DBMS_OUTPUT.PUT_LINE('FAIL');
-END IF;
-END;
-/
+# Test 1
+if echo "$CONTENT" | grep -q "set serveroutput on"; then
+    echo "PASS: SET SERVEROUTPUT ON found."
+else
+    echo "FAIL: SET SERVEROUTPUT ON not found."
+    exit 1
+fi
 
-PROMPT ========================================
-PROMPT Test 3: Marks = 75
-PROMPT Expected: PASS
-PROMPT ========================================
+# Test 2
+if echo "$CONTENT" | grep -q "declare"; then
+    echo "PASS: DECLARE found."
+else
+    echo "FAIL: DECLARE not found."
+    exit 1
+fi
 
-DECLARE
-v_marks NUMBER := 75;
-BEGIN
-IF v_marks >= 40 THEN
-DBMS_OUTPUT.PUT_LINE('PASS');
-ELSE
-DBMS_OUTPUT.PUT_LINE('FAIL');
-END IF;
-END;
-/
+# Test 3
+if echo "$CONTENT" | grep -Eq "marks[[:space:]]+number"; then
+    echo "PASS: marks NUMBER found."
+else
+    echo "FAIL: marks NUMBER not found."
+    exit 1
+fi
 
-PROMPT ========================================
-PROMPT Test 4: Marks = 0
-PROMPT Expected: FAIL
-PROMPT ========================================
+# Test 4
+if echo "$CONTENT" | grep -q "if"; then
+    echo "PASS: IF statement found."
+else
+    echo "FAIL: IF statement not found."
+    exit 1
+fi
 
-DECLARE
-v_marks NUMBER := 0;
-BEGIN
-IF v_marks >= 40 THEN
-DBMS_OUTPUT.PUT_LINE('PASS');
-ELSE
-DBMS_OUTPUT.PUT_LINE('FAIL');
-END IF;
-END;
-/
+# Test 5
+if echo "$CONTENT" | grep -q "then"; then
+    echo "PASS: THEN found."
+else
+    echo "FAIL: THEN not found."
+    exit 1
+fi
 
-PROMPT ========================================
-PROMPT Test 5: Marks = 100
-PROMPT Expected: PASS
-PROMPT ========================================
+# Test 6
+if echo "$CONTENT" | grep -q "else"; then
+    echo "PASS: ELSE found."
+else
+    echo "FAIL: ELSE not found."
+    exit 1
+fi
 
-DECLARE
-v_marks NUMBER := 100;
-BEGIN
-IF v_marks >= 40 THEN
-DBMS_OUTPUT.PUT_LINE('PASS');
-ELSE
-DBMS_OUTPUT.PUT_LINE('FAIL');
-END IF;
-END;
-/
+# Test 7
+if echo "$CONTENT" | grep -Eq "end[[:space:]]+if"; then
+    echo "PASS: END IF found."
+else
+    echo "FAIL: END IF not found."
+    exit 1
+fi
 
-PROMPT ========================================
-PROMPT All test cases completed.
-PROMPT ========================================
+# Test 8
+if echo "$CONTENT" | grep -Eq "marks[[:space:]]*>=[[:space:]]*50"; then
+    echo "PASS: marks >= 50 condition found."
+else
+    echo "FAIL: marks >= 50 condition not found."
+    exit 1
+fi
+
+# Test 9
+if echo "$CONTENT" | grep -q "student has passed"; then
+    echo "PASS: Passed message found."
+else
+    echo "FAIL: Student has Passed message not found."
+    exit 1
+fi
+
+# Test 10
+if echo "$CONTENT" | grep -q "student has failed"; then
+    echo "PASS: Failed message found."
+else
+    echo "FAIL: Student has Failed message not found."
+    exit 1
+fi
+
+echo ""
+echo "=========================================="
+echo " ALL TESTS PASSED"
+echo "=========================================="
+
+exit 0
