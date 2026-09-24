@@ -1,0 +1,22 @@
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  autograding:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout student repository
+        uses: actions/checkout@v4
+
+      - name: Make test executable
+        run: chmod +x Assignment_1/test.sh
+
+      - name: Run Autograding
+        run: |
+          echo "Starting assignment 1 Autograding..."
+          ./assignment_1/test.sh
